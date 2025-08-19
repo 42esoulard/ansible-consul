@@ -23,6 +23,7 @@
     - stat_syslogng.stat.exists
   notify:
     - restart syslog-ng
+    - order hosts
     - restart consul
 
 - name: Install rsyslogd config
@@ -39,4 +40,5 @@
     - not stat_syslogng.stat.exists
   notify:
     - restart rsyslog
+    - order hosts
     - restart consul

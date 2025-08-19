@@ -52,6 +52,7 @@
         mode: "0755"
       register: consul_install
       notify:
+        - order hosts
         - restart consul
         - reload systemd daemon
       when: consul_download is changed

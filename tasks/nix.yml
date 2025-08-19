@@ -240,7 +240,9 @@
     group: root
     mode: "0644"
   register: systemd_unit
-  notify: restart consul
+  notify:
+    - order hosts
+    - restart consul
   when:
     - ansible_service_mgr == "systemd"
     - not ansible_os_family == "FreeBSD"

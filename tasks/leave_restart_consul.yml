@@ -31,9 +31,12 @@
 - name: Assert that consul service is running
   delegate_to: "{{ rolling_restart_host }}"
   ansible.builtin.command:
-    cmd: "{{ consul_binary }} info {% if consul_acl_enable %} -token {{ consul_acl_master_token }} {% endif %} -http-addr {{ consul_addresses.http }}:{{ consul_ports.http }}"
+    cmd: "{{ consul_binary }} operator autopilot state"
+  environment:
+    CONSUL_HTTP_TOKEN: "{{ consul_acl_agent_token if consul_acl_enable else omit }}"
+    CONSUL_HTTP_ADDR: "{{ consul_addresses_http }}:{{ consul_ports_http }}"
   changed_when: false
-  register: consul_info
-  retries: 20
-  delay: 1
-  until: "consul_info.rc == 0"
+  register: consul_autopilot_state
+  retries: 6
+  delay: 10
+  until: consul_autopilot_state.stdout is regex('Failure Tolerance:\\s+[1-9]\\d*')
