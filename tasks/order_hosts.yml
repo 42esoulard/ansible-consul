@@ -1,6 +1,6 @@
 ---
 - name: Get consul info
-  ansible.builtin.shell:
+  ansible.builtin.command:
     cmd: "{{ consul_binary }} info"
   environment:
     CONSUL_HTTP_TOKEN: "{{ consul_acl_agent_token if consul_acl_enable else omit }}"
