@@ -5,25 +5,20 @@
   environment:
     CONSUL_HTTP_TOKEN: "{{ consul_acl_agent_token if consul_acl_enable else omit }}"
     CONSUL_HTTP_ADDR: "{{ consul_addresses_http }}:{{ consul_ports_http }}"
+  changed_when: false
   register: consul_info_output
-  ignore_errors: yes
 
 - name: Parse Consul leader value
-  set_fact:
+  ansible.builtin.set_fact:
     is_consul_leader: "{{ consul_info_output.stdout | regex_search('leader = (true|false)', '\\1') | first }}"
   when: consul_info_output is defined and consul_info_output.rc == 0
-  ignore_errors: yes
-
-- name: Debug is_consul_leader value
-  debug:
-    var: is_consul_leader
 
 - name: Set consul leader host
-  set_fact:
+  ansible.builtin.set_fact:
     consul_leader: "{{ inventory_hostname }}"
   when: is_consul_leader is defined and is_consul_leader | bool
 
 - name: Define custom host order placing secondaries first
-  set_fact:
+  ansible.builtin.set_fact:
     custom_host_order: "{{ (play_hosts | reject('equalto', consul_leader) | list) + [consul_leader] }}"
   when: is_consul_leader is defined and is_consul_leader | bool
