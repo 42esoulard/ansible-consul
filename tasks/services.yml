@@ -12,7 +12,6 @@
   loop_control:
     loop_var: service_item
   notify:
-    - order hosts
     - restart consul
 
 - name: Get the list of service config files
@@ -84,7 +83,6 @@
     loop_var: non_declared_service_item
   ignore_errors: "{{ ansible_check_mode }}"
   notify:
-    - order hosts
     - restart consul
 
 - name: Delete non declared services [Windows]

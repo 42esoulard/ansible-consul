@@ -25,7 +25,6 @@
     loop_var: config_item
   when: config_item.when
   notify:
-    - order hosts
     - restart consul
 
 - name: Create custom configuration
@@ -37,7 +36,6 @@
     mode: "0600"
   when: consul_config_custom is defined
   notify:
-    - order hosts
     - restart consul
 
 - name: Set fact list with custom configuration file

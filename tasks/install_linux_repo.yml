@@ -102,7 +102,6 @@
   become: true
   notify:
     - systemctl daemon-reload
-    - order hosts
     - restart consul
   when:
     - ansible_service_mgr == "systemd"

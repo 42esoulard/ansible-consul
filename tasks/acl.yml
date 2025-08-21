@@ -98,6 +98,5 @@
     group: "{{ consul_group }}"
     mode: "0600"
   notify:
-    - order hosts
     - restart consul
   when: consul_acl_policy | bool

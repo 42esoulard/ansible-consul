@@ -122,7 +122,6 @@
         group: "{{ consul_group }}"
         mode: "0755"
       notify:
-        - order hosts
         - restart consul
         - reload systemd daemon
       tags: installation
